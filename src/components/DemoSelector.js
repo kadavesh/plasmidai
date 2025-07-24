@@ -41,7 +41,7 @@ const DemoSelector = () => {
       {/* Header */}
       <div className="bg-white border-b border-gray-200 p-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-bio-dark mb-2">Waybio Plasmid AI Demo Center</h1>
+          <h1 className="text-3xl font-bold text-bio-dark mb-2">WayBio A&I Demo Center</h1>
           <p className="text-gray-600 text-lg">
             Choose a demo to explore different AI-powered plasmid design workflows
           </p>
