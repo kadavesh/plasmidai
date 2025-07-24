@@ -79,13 +79,15 @@ const demoConversations = {
       type: 'ai', 
       content: 'Yes, I found 3 plasmids in your inventory that contain the MYC gene. Let me show you the details:', 
       plasmids: [1, 2, 3],
-      showPlasmids: true
+      showPlasmids: true,
+      dataSources: ['inventory']
     },
     { type: 'user', content: 'What is the difference between them?' },
     { 
       type: 'ai', 
       content: 'Great question! Let me perform a sequence alignment to show you the key differences between these MYC plasmids:', 
       showAlignment: true,
+      dataSources: ['inventory', 'knowledge'],
       alignmentData: {
         sequences: [
           { name: "pMYC-001", seq: "ATGCCCCTCAACGTTAGCTTCACCAACAGGAACTATGACCTCGACTACGACTCGGTGCAGCCGTATTTCTCCTTCTTCCTCGACC" },
@@ -100,9 +102,17 @@ const demoConversations = {
       }
     },
     { type: 'user', content: 'Can you help me design a new variation?' },
-    { type: 'ai', content: 'Absolutely! I\'d be happy to help you create a new variation. What type of modification would you like to make to the MYC plasmid?' },
+    { 
+      type: 'ai', 
+      content: 'Absolutely! I\'d be happy to help you create a new variation. What type of modification would you like to make to the MYC plasmid?',
+      dataSources: ['knowledge']
+    },
     { type: 'user', content: 'I want to add a FLAG tag to it.' },
-    { type: 'ai', content: 'Excellent choice! FLAG tags are great for detection and purification. Let me ask - would you prefer the FLAG tag at the N-terminus or C-terminus?' },
+    { 
+      type: 'ai', 
+      content: 'Excellent choice! FLAG tags are great for detection and purification. Let me ask - would you prefer the FLAG tag at the N-terminus or C-terminus?',
+      dataSources: ['knowledge']
+    },
     { type: 'user', content: 'N-terminus please' },
     { 
       type: 'ai', 
@@ -116,7 +126,8 @@ const demoConversations = {
         ],
         description: "Custom MYC with N-terminal FLAG tag for enhanced detection"
       },
-      showDesign: true
+      showDesign: true,
+      dataSources: ['inventory', 'waybio', 'knowledge']
     }
   ],
 
@@ -126,14 +137,20 @@ const demoConversations = {
       type: 'ai', 
       content: 'I\'ve analyzed your sequence! Part of this sequence exists in your library in plasmid pBASE-007, but another part exists in our WayBio Parts library. Do you want me to create a new plasmid combining these elements?', 
       plasmids: [4],
-      showPlasmids: true
+      showPlasmids: true,
+      dataSources: ['inventory', 'waybio']
     },
     { type: 'user', content: 'Yes! But I also need to select a promoter for it.' },
-    { type: 'ai', content: 'Sure! What type of promoter are you thinking? What cell type will you be working with?' },
+    { 
+      type: 'ai', 
+      content: 'Sure! What type of promoter are you thinking? What cell type will you be working with?',
+      dataSources: ['knowledge']
+    },
     { type: 'user', content: 'Maybe a promoter that strongly expresses in HEK293 cells.' },
     { 
       type: 'ai', 
-      content: 'Perfect choice! For strong expression in HEK293 cells, I suggest CMV or EF1-alpha promoters. These are shown in publications (Chen et al. 2018, Nature Methods) to be strongly expressed in HEK293 cells. CMV tends to be slightly stronger but can be silenced over time, while EF1-alpha provides more stable long-term expression.'
+      content: 'Perfect choice! For strong expression in HEK293 cells, I suggest CMV or EF1-alpha promoters. These are shown in publications (Chen et al. 2018, Nature Methods) to be strongly expressed in HEK293 cells. CMV tends to be slightly stronger but can be silenced over time, while EF1-alpha provides more stable long-term expression.',
+      dataSources: ['knowledge', 'waybio']
     },
     { type: 'user', content: 'That sounds good! Let\'s go with CMV.' },
     { 
@@ -149,19 +166,29 @@ const demoConversations = {
         ],
         description: "Custom plasmid with CMV promoter driving your sequence combined with WayBio parts"
       },
-      showDesign: true
+      showDesign: true,
+      dataSources: ['inventory', 'waybio', 'knowledge']
     }
   ],
 
   demo3: [
     { type: 'user', content: 'I want to express a fluorescent protein in my cells. Can you help me select one?' },
-    { type: 'ai', content: 'Absolutely! I can help you select the perfect fluorescent protein. What application do you want to use it for?' },
+    { 
+      type: 'ai', 
+      content: 'Absolutely! I can help you select the perfect fluorescent protein. What application do you want to use it for?',
+      dataSources: ['knowledge']
+    },
     { type: 'user', content: 'For microscopy experiments.' },
-    { type: 'ai', content: 'Great! What light filters do you have available on your microscope setup?' },
+    { 
+      type: 'ai', 
+      content: 'Great! What light filters do you have available on your microscope setup?',
+      dataSources: ['knowledge']
+    },
     { type: 'user', content: 'I have green and red filters available.' },
     { 
       type: 'ai', 
-      content: 'Perfect! Based on your filter setup, I suggest mCherry (red) or mNeonGreen (green). mCherry is very bright and photostable for red channel imaging, while mNeonGreen is one of the brightest green fluorescent proteins available. Both work excellently for microscopy. Which would you prefer?'
+      content: 'Perfect! Based on your filter setup, I suggest mCherry (red) or mNeonGreen (green). mCherry is very bright and photostable for red channel imaging, while mNeonGreen is one of the brightest green fluorescent proteins available. Both work excellently for microscopy. Which would you prefer?',
+      dataSources: ['knowledge', 'waybio']
     },
     { type: 'user', content: 'Let\'s go with mCherry for the red channel.' },
     { 
@@ -177,7 +204,8 @@ const demoConversations = {
         ],
         description: "mCherry fluorescent protein expression vector optimized for microscopy with red filters"
       },
-      showDesign: true
+      showDesign: true,
+      dataSources: ['knowledge', 'waybio']
     }
   ]
 };
@@ -283,7 +311,6 @@ export const PlasmidProvider = ({ children }) => {
         // For standalone AI messages (shouldn't happen in current demo flow)
         setCurrentStep(currentStep + 1);
       }
-    }
   };
 
   const value = {

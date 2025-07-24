@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Bot, User, Play, RefreshCw, ArrowLeft } from 'lucide-react';
 import { usePlasmid } from '../context/PlasmidContext';
 import DemoSelector from './DemoSelector';
+import DataSources from './DataSources';
 
 const ChatPanel = () => {
   const { 
@@ -100,6 +101,9 @@ const ChatPanel = () => {
             : 'bg-white text-gray-800 border-gray-200'
         }`}>
           <p className="whitespace-pre-wrap">{message.content}</p>
+          {message.type === 'ai' && message.dataSources && (
+            <DataSources activeSources={message.dataSources} />
+          )}
         </div>
       </div>
     </motion.div>
