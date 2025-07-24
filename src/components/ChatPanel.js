@@ -1,10 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Play, RefreshCw } from 'lucide-react';
+import { Send, Bot, User, Play, RefreshCw, ArrowLeft } from 'lucide-react';
 import { usePlasmid } from '../context/PlasmidContext';
+import DemoSelector from './DemoSelector';
 
 const ChatPanel = () => {
-  const { messages, addMessage, runDemoSequence, advanceDemoStep, currentStep, demoConversation, isWaitingForAnswer } = usePlasmid();
+  const { 
+    messages, 
+    addMessage, 
+    runDemoSequence, 
+    advanceDemoStep, 
+    currentStep, 
+    demoConversations, 
+    isWaitingForAnswer, 
+    currentDemo, 
+    showDemoSelector,
+    backToDemo 
+  } = usePlasmid();
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
@@ -93,14 +105,33 @@ const ChatPanel = () => {
     </motion.div>
   );
 
+  if (showDemoSelector) {
+    return <DemoSelector />;
+  }
+
   return (
     <div className="h-full flex flex-col bg-bio-light">
       {/* Chat Header */}
       <div className="bg-white border-b border-gray-200 p-4">
         <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold text-bio-dark">AI Assistant</h2>
-            <p className="text-sm text-gray-600">Ask me about your plasmid inventory</p>
+          <div className="flex items-center space-x-3">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={backToDemo}
+              className="flex items-center space-x-1 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back</span>
+            </motion.button>
+            <div>
+              <h2 className="text-lg font-semibold text-bio-dark">AI Assistant</h2>
+              <p className="text-sm text-gray-600">
+                {currentDemo === 'demo1' && 'Inventory Search & Design Demo'}
+                {currentDemo === 'demo2' && 'Sequence Assembly Demo'}
+                {currentDemo === 'demo3' && 'Fluorescent Protein Selection Demo'}
+              </p>
+            </div>
           </div>
           <div className="flex space-x-2">
             {currentStep === 0 ? (
@@ -121,7 +152,7 @@ const ChatPanel = () => {
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 <span>AI Responding...</span>
               </motion.button>
-            ) : currentStep < demoConversation.length ? (
+            ) : currentStep < demoConversations[currentDemo]?.length ? (
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -129,7 +160,7 @@ const ChatPanel = () => {
                 className="flex items-center space-x-2 px-4 py-2 bg-bio-secondary text-white rounded-lg hover:bg-opacity-90 transition-colors"
               >
                 <Play className="w-4 h-4" />
-                <span>Next ({Math.floor(currentStep/2) + 1}/{Math.ceil(demoConversation.length/2)})</span>
+                <span>Next ({Math.floor(currentStep/2) + 1}/{Math.ceil(demoConversations[currentDemo]?.length/2)})</span>
               </motion.button>
             ) : (
               <motion.button
@@ -157,18 +188,22 @@ const ChatPanel = () => {
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         <AnimatePresence>
-          {messages.length === 0 && (
+          {messages.length === 0 && currentDemo && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="text-center py-12"
             >
-              <Bot className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-600 mb-2">
-                Welcome to PlasmidAI
+              <Bot className="w-12 h-12 text-bio-primary mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-bio-dark mb-2">
+                {currentDemo === 'demo1' && 'Inventory Search & Design'}
+                {currentDemo === 'demo2' && 'Sequence Assembly'}
+                {currentDemo === 'demo3' && 'Fluorescent Protein Selection'}
               </h3>
-              <p className="text-gray-500 mb-6">
-                I can help you search your plasmid inventory, compare sequences, and design new variants.
+              <p className="text-gray-600 mb-6">
+                {currentDemo === 'demo1' && 'Search your plasmid inventory, compare sequences, and design new variants.'}
+                {currentDemo === 'demo2' && 'Paste sequences to find matches and combine parts from multiple libraries.'}
+                {currentDemo === 'demo3' && 'Design expression vectors with optimal fluorescent proteins for microscopy.'}
               </p>
               <motion.button
                 whileHover={{ scale: 1.05 }}
