@@ -127,7 +127,7 @@ const demoConversations = {
         description: "Custom MYC with N-terminal FLAG tag for enhanced detection"
       },
       showDesign: true,
-      dataSources: ['inventory', 'waybio', 'knowledge']
+      dataSources: ['inventory', 'waybio', 'knowledge', 'ai-design']
     }
   ],
 
@@ -167,7 +167,7 @@ const demoConversations = {
         description: "Custom plasmid with CMV promoter driving your sequence combined with WayBio parts"
       },
       showDesign: true,
-      dataSources: ['inventory', 'waybio', 'knowledge']
+      dataSources: ['inventory', 'waybio', 'knowledge', 'ai-design']
     }
   ],
 
@@ -205,7 +205,7 @@ const demoConversations = {
         description: "mCherry fluorescent protein expression vector optimized for microscopy with red filters"
       },
       showDesign: true,
-      dataSources: ['knowledge', 'waybio']
+      dataSources: ['knowledge', 'waybio', 'ai-design']
     }
   ]
 };

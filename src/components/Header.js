@@ -16,7 +16,7 @@ const Header = () => {
             <Dna className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-bio-dark">PlasmidAI</h1>
+            <h1 className="text-xl font-bold text-bio-dark">Waybio Plasmid AI</h1>
             <p className="text-sm text-gray-600">Intelligent Plasmid Design Platform</p>
           </div>
         </div>
