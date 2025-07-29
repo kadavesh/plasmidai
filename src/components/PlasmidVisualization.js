@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, Download, Tag } from 'lucide-react';
+import { Eye, Download, CheckCircle } from 'lucide-react';
+import { usePlasmid } from '../context/PlasmidContext';
 
 const PlasmidVisualization = ({ plasmid }) => {
+  const { wizardState, handleUserAction } = usePlasmid();
   const [selectedFeature, setSelectedFeature] = useState(null);
 
   // Calculate positions for features on the circle
@@ -51,6 +53,17 @@ const PlasmidVisualization = ({ plasmid }) => {
           <p className="text-sm text-gray-600">{plasmid.description}</p>
         </div>
         <div className="flex items-center space-x-2">
+          {wizardState.step === 'selectPlasmid' && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => handleUserAction('selectPlasmid', { plasmidId: plasmid.id })}
+              className="flex items-center space-x-2 px-3 py-1 bg-bio-accent text-white rounded-lg hover:bg-opacity-90 transition-colors text-sm"
+            >
+              <CheckCircle className="w-4 h-4" />
+              Select
+            </motion.button>
+          )}
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -145,7 +158,7 @@ const PlasmidVisualization = ({ plasmid }) => {
       {/* Features List */}
       <div className="space-y-2">
         <h4 className="text-sm font-medium text-gray-700 flex items-center">
-          <Tag className="w-4 h-4 mr-1" />
+          <CheckCircle className="w-4 h-4 mr-1" />
           Features ({plasmid.features.length})
         </h4>
         <div className="space-y-1">

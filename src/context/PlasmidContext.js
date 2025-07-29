@@ -12,330 +12,331 @@ export const usePlasmid = () => {
 
 // Mock plasmid data
 const mockPlasmids = [
-  {
-    id: 1,
-    name: "pMYC-001",
-    description: "High expression MYC vector with CMV promoter",
-    sequence: "ATGCCCCTCAACGTTAGCTTCACCAACAGGAACTATGACCTCGACTACGACTCGGTGCAGCCGTATTTCTCCTTCTTCCTCGACC",
-    length: 5847,
-    features: [
-      { name: "MYC", start: 1240, end: 1572, type: "gene", color: "#ff6b6b" },
-      { name: "CMV Promoter", start: 890, end: 1190, type: "promoter", color: "#4ecdc4" },
-      { name: "AmpR", start: 2100, end: 2960, type: "resistance", color: "#45b7d1" },
-    ],
-    tags: ["MYC", "CMV", "High Expression"],
-    company: "BioTech Corp"
-  },
-  {
-    id: 2,
-    name: "pMYC-FLAG-002",
-    description: "MYC with N-terminal FLAG tag",
-    sequence: "ATGGACTACAAAGACGATGACGACAAGCCCCTCAACGTTAGCTTCACCAACAGGAACTATGACCTCGACTACGACTCGGTGCAGCC",
-    length: 5923,
-    features: [
-      { name: "FLAG Tag", start: 1240, end: 1264, type: "tag", color: "#95e1d3" },
-      { name: "MYC", start: 1265, end: 1597, type: "gene", color: "#ff6b6b" },
-      { name: "CMV Promoter", start: 890, end: 1190, type: "promoter", color: "#4ecdc4" },
-      { name: "AmpR", start: 2150, end: 3010, type: "resistance", color: "#45b7d1" },
-    ],
-    tags: ["MYC", "FLAG", "Tagged"],
-    company: "BioTech Corp"
-  },
-  {
-    id: 3,
-    name: "pMYC-HIS-003",
-    description: "MYC with C-terminal His tag",
-    sequence: "ATGCCCCTCAACGTTAGCTTCACCAACAGGAACTATGACCTCGACTACGACTCGGTGCAGCCGCACCACCACCACCACCACTAG",
-    length: 5901,
-    features: [
-      { name: "MYC", start: 1240, end: 1572, type: "gene", color: "#ff6b6b" },
-      { name: "His Tag", start: 1573, end: 1596, type: "tag", color: "#ffeaa7" },
-      { name: "CMV Promoter", start: 890, end: 1190, type: "promoter", color: "#4ecdc4" },
-      { name: "AmpR", start: 2120, end: 2980, type: "resistance", color: "#45b7d1" },
-    ],
-    tags: ["MYC", "His", "Purification"],
-    company: "BioTech Corp"
-  },
-  {
-    id: 4,
-    name: "pBASE-007",
-    description: "Base vector with partial sequence match",
-    sequence: "ATGCCGCTGAAGTCGGCCATCGTGGAGTACGACCACGGCCGCATCAAGACCTTCGAGCGCTACGGCAAG",  
-    length: 4200,
-    features: [
-      { name: "Partial Match", start: 1, end: 30, type: "gene", color: "#ff9800" },
-      { name: "Origin", start: 3500, end: 4000, type: "origin", color: "#2196f3" },
-      { name: "AmpR", start: 2500, end: 3400, type: "resistance", color: "#45b7d1" },
-    ],
-    tags: ["Base", "Partial", "Assembly"],
-    company: "BioTech Corp"
-  }
+    {
+      id: 1,
+      name: "pMYC-001",
+      description: "Standard MYC expression vector",
+      length: 5400,
+      features: [
+        { name: "MYC", start: 100, end: 1400, type: "gene", color: "#ff6b6b" },
+        { name: "CMV Promoter", start: 10, end: 80, type: "promoter", color: "#4ecdc4" },
+        { name: "AmpR", start: 2000, end: 2900, type: "resistance", color: "#45b7d1" },
+        { name: "pA", start: 1500, end: 1600, type: "terminator", color: "#feca57" }
+      ],
+      tags: ["MYC", "Backbone"],
+      company: "BioTech Corp"
+    },
+    {
+      id: 2,
+      name: "pMYC-FLAG-002",
+      description: "N-terminal FLAG-tagged MYC",
+      length: 5424,
+      features: [
+        { name: "FLAG", start: 100, end: 124, type: "tag", color: "#95e1d3" },
+        { name: "MYC", start: 125, end: 1524, type: "gene", color: "#ff6b6b" },
+        { name: "CMV Promoter", start: 10, end: 80, type: "promoter", color: "#4ecdc4" },
+        { name: "AmpR", start: 2100, end: 3000, type: "resistance", color: "#45b7d1" }
+      ],
+      tags: ["MYC", "FLAG", "N-term"],
+      company: "BioTech Corp"
+    },
+    {
+      id: 3,
+      name: "pMYC-HIS-003",
+      description: "C-terminal His-tagged MYC",
+      length: 5418,
+      features: [
+        { name: "MYC", start: 100, end: 1400, type: "gene", color: "#ff6b6b" },
+        { name: "His-Tag", start: 1401, end: 1418, type: "tag", color: "#95e1d3" },
+        { name: "AmpR", start: 2000, end: 2900, type: "resistance", color: "#45b7d1" }
+      ],
+      tags: ["MYC", "His", "C-term"],
+      company: "BioTech Corp"
+    }
+  ];
+  
+  const cas9Plasmids = [
+    {
+      id: 5,
+      name: "pCas9-Plain",
+      description: "Standard Cas9 expression vector",
+      length: 9100,
+      features: [
+        { name: "Cas9", start: 100, end: 4200, type: "gene", color: "#ff6b6b" },
+        { name: "CMV Promoter", start: 10, end: 80, type: "promoter", color: "#4ecdc4" },
+        { name: "AmpR", start: 5000, end: 5900, type: "resistance", color: "#45b7d1" },
+      ],
+      tags: ["Cas9", "Standard"],
+      company: "BioTech Corp"
+    },
+    {
+      id: 6,
+      name: "pCas9-GFP",
+      description: "Cas9 fused to eGFP for visualization",
+      length: 9800,
+      features: [
+        { name: "Cas9", start: 100, end: 4200, type: "gene", color: "#ff6b6b" },
+        { name: "eGFP", start: 4201, end: 4900, type: "tag", color: "#4caf50" },
+        { name: "CMV Promoter", start: 10, end: 80, type: "promoter", color: "#4ecdc4" },
+      ],
+      tags: ["Cas9", "GFP", "Fusion"],
+      company: "BioTech Corp"
+    },
+    {
+      id: 7,
+      name: "pCas9-3xNLS",
+      description: "Cas9 with enhanced nuclear localization",
+      length: 9150,
+      features: [
+        { name: "3xNLS", start: 100, end: 150, type: "nls", color: "#ff9800" },
+        { name: "Cas9", start: 151, end: 4250, type: "gene", color: "#ff6b6b" },
+      ],
+      tags: ["Cas9", "NLS", "Enhanced"],
+      company: "BioTech Corp"
+    },
+    {
+      id: 8,
+      name: "pCas9-FLAG",
+      description: "Cas9 with N-terminal FLAG tag",
+      length: 9124,
+      features: [
+        { name: "FLAG", start: 100, end: 124, type: "tag", color: "#95e1d3" },
+        { name: "Cas9", start: 125, end: 4224, type: "gene", color: "#ff6b6b" },
+      ],
+      tags: ["Cas9", "FLAG", "Tagged"],
+      company: "BioTech Corp"
+    },
+    {
+      id: 9,
+      name: "pSpCas9-2A-Puro",
+      description: "Streptococcus pyogenes Cas9 with Puromycin resistance",
+      length: 9400,
+      features: [
+        { name: "SpCas9", start: 100, end: 4200, type: "gene", color: "#ff6b6b" },
+        { name: "PuroR", start: 4500, end: 5100, type: "resistance", color: "#f44336" },
+      ],
+      tags: ["Cas9", "Puromycin", "SpCas9"],
+      company: "BioTech Corp"
+    },
+    {
+      id: 10,
+      name: "pCas9-SV40NLS",
+      description: "Cas9 with a standard SV40 NLS",
+      length: 9121,
+      features: [
+        { name: "SV40 NLS", start: 4170, end: 4191, type: "nls", color: "#ff9800" },
+        { name: "Cas9", start: 100, end: 4169, type: "gene", color: "#ff6b6b" },
+      ],
+      tags: ["Cas9", "SV40", "NLS"],
+      company: "BioTech Corp"
+    }
 ];
-
-const cas9Plasmids = [
-  {
-    id: 5,
-    name: "pCas9-Plain",
-    description: "Standard Cas9 expression vector",
-    length: 9100,
-    features: [
-      { name: "Cas9", start: 100, end: 4200, type: "gene", color: "#ff6b6b" },
-      { name: "CMV Promoter", start: 10, end: 80, type: "promoter", color: "#4ecdc4" },
-      { name: "AmpR", start: 5000, end: 5900, type: "resistance", color: "#45b7d1" },
-    ],
-    tags: ["Cas9", "Standard"],
-    company: "BioTech Corp"
-  },
-  {
-    id: 6,
-    name: "pCas9-GFP",
-    description: "Cas9 fused to eGFP for visualization",
-    length: 9800,
-    features: [
-      { name: "Cas9", start: 100, end: 4200, type: "gene", color: "#ff6b6b" },
-      { name: "eGFP", start: 4201, end: 4900, type: "tag", color: "#4caf50" },
-      { name: "CMV Promoter", start: 10, end: 80, type: "promoter", color: "#4ecdc4" },
-    ],
-    tags: ["Cas9", "GFP", "Fusion"],
-    company: "BioTech Corp"
-  },
-  {
-    id: 7,
-    name: "pCas9-3xNLS",
-    description: "Cas9 with enhanced nuclear localization",
-    length: 9150,
-    features: [
-      { name: "3xNLS", start: 100, end: 150, type: "nls", color: "#ff9800" },
-      { name: "Cas9", start: 151, end: 4250, type: "gene", color: "#ff6b6b" },
-    ],
-    tags: ["Cas9", "NLS", "Enhanced"],
-    company: "BioTech Corp"
-  },
-  {
-    id: 8,
-    name: "pCas9-FLAG",
-    description: "Cas9 with N-terminal FLAG tag",
-    length: 9124,
-    features: [
-      { name: "FLAG", start: 100, end: 124, type: "tag", color: "#95e1d3" },
-      { name: "Cas9", start: 125, end: 4224, type: "gene", color: "#ff6b6b" },
-    ],
-    tags: ["Cas9", "FLAG", "Tagged"],
-    company: "BioTech Corp"
-  },
-  {
-    id: 9,
-    name: "pSpCas9-2A-Puro",
-    description: "Streptococcus pyogenes Cas9 with Puromycin resistance",
-    length: 9400,
-    features: [
-      { name: "SpCas9", start: 100, end: 4200, type: "gene", color: "#ff6b6b" },
-      { name: "PuroR", start: 4500, end: 5100, type: "resistance", color: "#f44336" },
-    ],
-    tags: ["Cas9", "Puromycin", "SpCas9"],
-    company: "BioTech Corp"
-  },
-  {
-    id: 10,
-    name: "pCas9-SV40NLS",
-    description: "Cas9 with a standard SV40 NLS",
-    length: 9121,
-    features: [
-      { name: "SV40 NLS", start: 4170, end: 4191, type: "nls", color: "#ff9800" },
-      { name: "Cas9", start: 100, end: 4169, type: "gene", color: "#ff6b6b" },
-    ],
-    tags: ["Cas9", "SV40", "NLS"],
-    company: "BioTech Corp"
-  }
-];
-
-const demoConversations = {
-  demo1: [
-    { type: 'user', content: 'Do I have a plasmid that contains the gene MYC?' },
-    { 
-      type: 'ai', 
-      content: 'Yes, I found 3 plasmids in your inventory that contain the MYC gene. Let me show you the details:', 
-      plasmids: [1, 2, 3],
-      showPlasmids: true,
-      dataSources: ['inventory']
-    },
-    { type: 'user', content: 'What is the difference between them?' },
-    { 
-      type: 'ai', 
-      content: 'Great question! Let me perform a sequence alignment to show you the key differences between these MYC plasmids:', 
-      showAlignment: true,
-      dataSources: ['inventory', 'knowledge'],
-      alignmentData: {
-        sequences: [
-          { name: "pMYC-001", seq: "ATGCCCCTCAACGTTAGCTTCACCAACAGGAACTATGACCTCGACTACGACTCGGTGCAGCCGTATTTCTCCTTCTTCCTCGACC" },
-          { name: "pMYC-FLAG-002", seq: "ATGGACTACAAAGACGATGACGACAAGCCCCTCAACGTTAGCTTCACCAACAGGAACTATGACCTCGACTACGACTCGGTGCAGCC" },
-          { name: "pMYC-HIS-003", seq: "ATGCCCCTCAACGTTAGCTTCACCAACAGGAACTATGACCTCGACTACGACTCGGTGCAGCCGCACCACCACCACCACCACTAG" }
-        ],
-        differences: [
-          "pMYC-FLAG-002 has an N-terminal FLAG tag for detection",
-          "pMYC-HIS-003 has a C-terminal His tag for purification",
-          "pMYC-001 is the untagged wild-type version"
-        ]
-      }
-    },
-    { type: 'user', content: 'Can you help me design a new variation?' },
-    { 
-      type: 'ai', 
-      content: 'Absolutely! I\'d be happy to help you create a new variation. What type of modification would you like to make to the MYC plasmid?',
-      dataSources: ['knowledge']
-    },
-    { type: 'user', content: 'I want to add a FLAG tag to it.' },
-    { 
-      type: 'ai', 
-      content: 'Excellent choice! FLAG tags are great for detection and purification. Let me ask - would you prefer the FLAG tag at the N-terminus or C-terminus?',
-      dataSources: ['knowledge']
-    },
-    { type: 'user', content: 'N-terminus please' },
-    { 
-      type: 'ai', 
-      content: 'Perfect! I\'ve designed a new MYC plasmid with an N-terminal FLAG tag. Here\'s your custom design:', 
-      newDesign: {
-        name: "pMYC-FLAG-Custom",
-        sequence: "ATGGACTACAAAGACGATGACGACAAGCCCCTCAACGTTAGCTTCACCAACAGGAACTATGACCTCGACTACGACTCGGTGCAGCCGTATTTCTCCTTCTTCCTCGACC",
-        features: [
-          { name: "FLAG Tag", start: 1, end: 24, type: "tag", color: "#95e1d3" },
-          { name: "MYC", start: 25, end: 357, type: "gene", color: "#ff6b6b" }
-        ],
-        description: "Custom MYC with N-terminal FLAG tag for enhanced detection"
-      },
-      showDesign: true,
-      dataSources: ['inventory', 'waybio', 'knowledge', 'ai-design']
-    }
-  ],
-
-  demo2: [
-    { type: 'user', content: 'Does this sequence exist in my inventory?\n\nATGCCGCTGAAGTCGGCCATCGTGGAGTACGACCTGCAGGCGATCAAGACCTTCGAGCGCTAC' },
-    { 
-      type: 'ai', 
-      content: 'I\'ve analyzed your sequence! Part of this sequence exists in your library in plasmid pBASE-007, but another part exists in our WayBio Parts library. Do you want me to create a new plasmid combining these elements?', 
-      plasmids: [4],
-      showPlasmids: true,
-      dataSources: ['inventory', 'waybio']
-    },
-    { type: 'user', content: 'Yes! But I also need to select a promoter for it.' },
-    { 
-      type: 'ai', 
-      content: 'Sure! What type of promoter are you thinking? What cell type will you be working with?',
-      dataSources: ['knowledge']
-    },
-    { type: 'user', content: 'Maybe a promoter that strongly expresses in HEK293 cells.' },
-    { 
-      type: 'ai', 
-      content: 'Perfect choice! For strong expression in HEK293 cells, I suggest CMV or EF1-alpha promoters. These are shown in publications (Chen et al. 2018, Nature Methods) to be strongly expressed in HEK293 cells. CMV tends to be slightly stronger but can be silenced over time, while EF1-alpha provides more stable long-term expression.',
-      dataSources: ['knowledge', 'waybio']
-    },
-    { type: 'user', content: 'That sounds good! Let\'s go with CMV.' },
-    { 
-      type: 'ai', 
-      content: 'Excellent! I\'ve designed your custom plasmid with CMV promoter and the combined sequence elements. Here\'s your design:', 
-      newDesign: {
-        name: "pCMV-Custom-001",
-        sequence: "GTTGACATTGATTATTGACTAGTTATTAATAGTAATCAATTACGGGGTCATTAGTTCATAGCCCATATATGGAGTTCCGCGTTACATAACTTACGGTAAATGGCCCGCCTGGCTGACCGCCCAACGACCCCCGCCCATTGACGTCAATAATGACGTATGTTCCCATAGTAACGCCAATAGGGACTTTCCATTGACGTCAATGGGTGGAGTATTTACGGTAAACTGCCCACTTGGCAGTACATCAAGTGTATCATATGCCAAGTACGCCCCCTATTGAC",
-        features: [
-          { name: "CMV Promoter", start: 1, end: 150, type: "promoter", color: "#4ecdc4" },
-          { name: "Your Sequence", start: 151, end: 213, type: "gene", color: "#ff6b6b" },
-          { name: "WayBio Part", start: 214, end: 280, type: "part", color: "#95e1d3" }
-        ],
-        description: "Custom plasmid with CMV promoter driving your sequence combined with WayBio parts"
-      },
-      showDesign: true,
-      dataSources: ['inventory', 'waybio', 'knowledge', 'ai-design']
-    }
-  ],
-
-  demo3: [
-    { type: 'user', content: 'I want to express a fluorescent protein in my cells. Can you help me select one?' },
-    { 
-      type: 'ai', 
-      content: 'Absolutely! I can help you select the perfect fluorescent protein. What application do you want to use it for?',
-      dataSources: ['knowledge']
-    },
-    { type: 'user', content: 'For microscopy experiments.' },
-    { 
-      type: 'ai', 
-      content: 'Great! What light filters do you have available on your microscope setup?',
-      dataSources: ['knowledge']
-    },
-    { type: 'user', content: 'I have green and red filters available.' },
-    { 
-      type: 'ai', 
-      content: 'Perfect! Based on your filter setup, I suggest mCherry (red) or mNeonGreen (green). mCherry is very bright and photostable for red channel imaging, while mNeonGreen is one of the brightest green fluorescent proteins available. Both work excellently for microscopy. Which would you prefer?',
-      dataSources: ['knowledge', 'waybio']
-    },
-    { type: 'user', content: 'Let\'s go with mCherry for the red channel.' },
-    { 
-      type: 'ai', 
-      content: 'Excellent choice! mCherry is perfect for microscopy with red filters. I\'ve designed a plasmid with mCherry under a strong promoter. Here\'s your fluorescent protein expression vector:', 
-      newDesign: {
-        name: "pCMV-mCherry-001",
-        sequence: "ATGGTGAGCAAGGGCGAGGAGGATAACATGGCCATCATCAAGGAGTTCATGCGCTTCAAGGTGCACATGGAGGGCTCCGTGAACGGCCACGAGTTCGAGATCGAGGGCGAGGGCGAGGGCCGCCCCTACGAGGGCACCCAGACCGCCAAGCTGAAGGTGACCAAGGGTGGCCCCCTGCCCTTCGCCTGGGACATCCTGTCCCCTCAGTTCATGTACGGCTCCAAGGCCTACGTGAAGCACCCCGCCGACATCCCCGACTACTTGAAGCTGTCCTTCCCCGAGGGCTTCAAGTGGGAGCGCGTGATGAACTTCGAGGACGGCGGCGTGGTGACCGTGACCCAGGACTCCTCCCTGCAGGACGGCGAGTTCATCTACAAGGTGAAGCTGCGCGGCACCAACTTCCCCTCCGACGGCCCCGTAATGCAGAAGAAGACCATGGGCTGGGAGGCCTCCTCCGAGCGGATGTACCCCGAGGACGGCGCCCTGAAGGGCGAGATCAAGCAGAGGCTGAAGCTGAAGGACGGCGGCCACTACGACGCTGAGGTCAAGACCACCTACAAGGCCAAGAAGCCCGTGCAGCTGCCCGGCGCCTACAACGTCAACATCAAGTTGGACATCACCTCCCACAACGAGGACTACACCATCGTGGAACAGTACGAACGCGCCGAGGGCCGCCACTCCACCGGCGGCATGGACGAGCTGTACAAGTAA",
-        features: [
-          { name: "CMV Promoter", start: 1, end: 150, type: "promoter", color: "#4ecdc4" },
-          { name: "mCherry", start: 151, end: 864, type: "fluorescent_protein", color: "#ff1744" },
-          { name: "Stop Codon", start: 865, end: 867, type: "terminator", color: "#9e9e9e" }
-        ],
-        description: "mCherry fluorescent protein expression vector optimized for microscopy with red filters"
-      },
-      showDesign: true,
-      dataSources: ['knowledge', 'waybio', 'ai-design']
-    }
-  ]
-};
 
 export const PlasmidProvider = ({ children }) => {
   const [plasmids] = useState([...mockPlasmids, ...cas9Plasmids]);
   const [selectedPlasmids, setSelectedPlasmids] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [currentStep, setCurrentStep] = useState(0);
   const [showAlignment, setShowAlignment] = useState(false);
   const [showNewDesign, setShowNewDesign] = useState(false);
   const [newDesign, setNewDesign] = useState(null);
   const [isWaitingForAnswer, setIsWaitingForAnswer] = useState(false);
+  const [wizardState, setWizardState] = useState({
+    step: 'start', // start, showPlasmids, selectPlasmid, showAlignment, offerModification, selectLinker, showDesign
+    selectedPlasmidId: null,
+    selectedLinker: null
+  });
 
-  const addMessage = (message) => {
-    setMessages(prev => [...prev, { ...message, id: Date.now() }]);
-  };
-
-  const selectPlasmid = (plasmidId) => {
-    setSelectedPlasmids(prev => 
-      prev.includes(plasmidId) 
-        ? prev.filter(id => id !== plasmidId)
-        : [...prev, plasmidId]
-    );
+  const addMessage = (message, payload = null) => {
+    const newMsg = { ...message, id: Date.now() };
+    if (payload) {
+      newMsg.payload = payload;
+    }
+    setMessages(prev => [...prev, newMsg]);
   };
 
   const runDemoSequence = () => {
     setMessages([]);
-    setCurrentStep(0);
     setShowAlignment(false);
     setShowNewDesign(false);
     setSelectedPlasmids([]);
     setNewDesign(null);
     setIsWaitingForAnswer(false);
+    setWizardState({
+      step: 'start',
+      selectedPlasmidId: null,
+      selectedLinker: null
+    });
   };
 
   const advanceDemoStep = () => {
+    // This is the central controller for the interactive demo
+    setIsWaitingForAnswer(true);
+
+    // Simulate AI thinking time
+    setTimeout(() => {
+        const currentUserMsg = { type: 'user', content: '' };
+        const nextAIMsg = { type: 'ai', content: '', dataSources: [] };
+
+        let nextStep = wizardState.step;
+        
+        switch (wizardState.step) {
+            case 'start':
+                currentUserMsg.content = "Do I have a gene called Cas9 in my inventory?";
+                addMessage(currentUserMsg);
+
+                setTimeout(() => {
+                    nextAIMsg.content = "Yes, I found 6 plasmids with the Cas9 gene. Here they are.";
+                    nextAIMsg.dataSources = ['inventory'];
+                    setSelectedPlasmids([5, 6, 7, 8, 9, 10]);
+                    nextStep = 'showPlasmids';
+                    addMessage(nextAIMsg);
+                    setWizardState(prev => ({ ...prev, step: nextStep }));
+                    setIsWaitingForAnswer(false);
+                }, 1500);
+                return; // early return to handle async message adding
+            
+            case 'showPlasmids':
+              currentUserMsg.content = "What are the differences between them?";
+              addMessage(currentUserMsg);
+    
+              setTimeout(() => {
+                nextAIMsg.content = "Here's an alignment of the core Cas9 regions. The main variations are tags and nuclear localization signals (NLS).\n\nSelect a plasmid to use as a base for your new cloning project.";
+                nextAIMsg.dataSources = ['inventory', 'knowledge'];
+                addMessage(nextAIMsg);
+                setShowAlignment(true);
+                setWizardState(prev => ({ ...prev, step: 'selectPlasmid' }));
+                setIsWaitingForAnswer(false);
+              }, 1500);
+              return;
+
+            case 'offerModification':
+                currentUserMsg.content = "I want to add an NLS to this Cas9. What should I use?";
+                addMessage(currentUserMsg);
+
+                setTimeout(() => {
+                    nextAIMsg.content = "We can certainly add a Nuclear Localization Signal (NLS). I've found some common options in your company's inventory and from the broader literature. Please choose one to proceed.";
+                    nextAIMsg.dataSources = ['inventory', 'waybio', 'knowledge'];
+                    const payload = {
+                      type: 'linkerOptions',
+                      data: {
+                        'From Your Company Inventory': [
+                            { name: 'Standard Flexible (GGGGS)x3', value: 'GGGGSGGGGSGGGGS', description: 'High flexibility, 15 aa length. Example: GFP-Cas9 fusions' },
+                            { name: 'Ultra-Flexible (GGGGS)x4', value: 'GGGGSGGGGSGGGGSGGGGS', description: 'Maximum flexibility, 20 aa length. Example: Multi-domain proteins' },
+                            { name: 'Rigid Alpha-Helical (EAAAK)x3', value: 'EAAAKEAAAKEAAAK', description: 'Maintains domain separation, 15 aa. Example: Antibody engineering' },
+                        ],
+                        'From WayBio Parts Library': [
+                            { name: 'Short Glycine-Serine (GS)x5', value: 'GSGSGSGSGS', description: 'Minimal flexible linker, 10 aa. Example: scFv constructs' },
+                            { name: 'Proline-Rich Semi-Rigid (AP)x6', value: 'APAPAPAPAPAP', description: 'Semi-rigid structure, 12 aa. Example: Enzyme fusions' },
+                            { name: 'Long Flexible (GGGGS)x6', value: 'GGGGSGGGGSGGGGSGGGGSGGGGSGGGS', description: 'Extended flexibility, 30 aa. Example: Large domain fusions' },
+                        ],
+                        'From Literature (Validated)': [
+                            { name: 'TEV Protease Cleavable', value: 'ENLYFQSGGGGS', description: 'Cleavable linker with TEV site. Example: Purification tags' },
+                            { name: 'Thrombin Cleavable', value: 'LVPRGSGGGGS', description: 'Thrombin cleavage site + flexible. Example: Protein purification' },
+                            { name: 'Compact Rigid (PAPAP)x3', value: 'PAPAPPAPAPPAPAP', description: 'Compact rigid structure, 15 aa. Example: Structural proteins' },
+                        ]
+                      }
+                    };
+                    addMessage(nextAIMsg, payload);
+                    setWizardState(prev => ({...prev, step: 'selectLinker'}));
+                    setIsWaitingForAnswer(false);
+                }, 1500);
+                return;
+
+            default:
+                // Handles steps that are only advanced by user interaction
+                setIsWaitingForAnswer(false);
+                return;
+        }
+
+    }, 500);
+  };
+  
+  const handleUserAction = (action, payload) => {
+    setIsWaitingForAnswer(true);
+
+    if (action === 'selectPlasmid') {
+        const { plasmidId } = payload;
+        const selected = plasmids.find(p => p.id === plasmidId);
+        
+        // This check prevents crash if plasmid not found
+        if (!selected) {
+            console.error("Selected plasmid not found:", plasmidId);
+            setIsWaitingForAnswer(false);
+            return;
+        }
+        
+        setWizardState(prev => ({ ...prev, step: 'offerModification', selectedPlasmidId: plasmidId }));
+        addMessage({ type: 'user', content: `Great, I'll select ${selected.name} for my new cloning project.` });
+      
+        // Visually select only this one
+        setSelectedPlasmids([plasmidId]);
+        setShowAlignment(false); // Hide alignment view
+
+        setTimeout(() => {
+            const aiMessage = {
+              type: 'ai',
+              content: `Excellent choice. ${selected.name} is a great starting point. What would you like to do with it?`,
+              dataSources: ['knowledge']
+            };
+            addMessage(aiMessage);
+            setIsWaitingForAnswer(false);
+        }, 1500);
+    }
+
+    if (action === 'selectLinker') {
+        const { linker } = payload;
+        const basePlasmid = plasmids.find(p => p.id === wizardState.selectedPlasmidId);
+
+        if (!basePlasmid) {
+            console.error("CRASH AVERTED: Could not find base plasmid for design. Wizard state:", wizardState);
+            addMessage({ type: 'ai', content: "Sorry, an error occurred and I lost track of the selected plasmid. Could you please restart the demo?" });
+            setIsWaitingForAnswer(false);
+            return;
+        }
+
+        addMessage({ type: 'user', content: `I'll use the ${linker.name}.` });
+
+        setTimeout(() => {
+            const newPlasmid = {
+                name: `${basePlasmid.name}-NLS-${linker.name.split(' ')[0]}`,
+                description: `New design: ${basePlasmid.name} with an added NLS using a ${linker.name}.`,
+                length: basePlasmid.length + (linker.value.length * 3), // Approx length change
+                features: [
+                    ...basePlasmid.features,
+                    { name: `NLS (${linker.name})`, start: 4201, end: 4201 + linker.value.length, type: 'nls', color: '#ff9800' },
+                ],
+                tags: [...basePlasmid.tags, 'NLS', 'Custom-Design'],
+                sequence: `ATGAAGATCCTGAAAGACCTGCAGGATGACATGAAAGAGCTGCAGACCTACGAGAAGATGCTGCAGCTGAAGGACCTGCAG${linker.value}GATGACATGAAAGAGCTGCAGACCTACGAGAAGATGCTGCAGCTGAAGGACCTGCAGGATGACATGAAAGAGCTGCAGACCTACGAGAAGATGCTGCAGCTGAAGGACCTGCAGGATGACATGAAAGAGCTGCAGACCTACGAGAAGATGCTGCAGCTGAAGGACCTGCAGGATGACATGAAAGAG`
+            };
+            setNewDesign(newPlasmid);
+            setShowNewDesign(true);
+            setSelectedPlasmids([]);
+            
+            const aiMessage = {
+                type: 'ai',
+                content: `Great choice! I've generated the new plasmid map for **${newPlasmid.name}**. You can see the updated design on the right. Does this look correct?`,
+                dataSources: ['inventory', 'waybio', 'ai-design']
+            };
+            addMessage(aiMessage);
+            setWizardState(prev => ({ ...prev, step: 'showDesign', selectedLinker: linker }));
+            setIsWaitingForAnswer(false);
+        }, 1500);
+    }
   };
 
   const value = {
     plasmids,
     selectedPlasmids,
     messages,
-    currentStep,
     showAlignment,
     showNewDesign,
     newDesign,
     isWaitingForAnswer,
+    wizardState,
     addMessage,
-    selectPlasmid,
-    setCurrentStep,
     runDemoSequence,
     advanceDemoStep,
+    handleUserAction,
   };
 
   return (

@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Download, Check, X, Edit3, Copy } from 'lucide-react';
+import { Check, X, Download, Sparkles, Copy, Edit3 } from 'lucide-react';
 
 const NewDesign = ({ design }) => {
   const [approved, setApproved] = useState(null);
   const [showSequence, setShowSequence] = useState(true);
+
+  if (!design) {
+    return null;
+  }
 
   const formatSequence = (sequence) => {
     // Split sequence into groups of 10 for better readability

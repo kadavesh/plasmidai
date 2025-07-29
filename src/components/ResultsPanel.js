@@ -10,13 +10,14 @@ const ResultsPanel = () => {
   const { 
     plasmids, 
     selectedPlasmids, 
-    showAlignment, 
+    showAlignment,
     showNewDesign, 
     newDesign,
     wizardState,
   } = usePlasmid();
 
   const selectedPlasmidData = plasmids.filter(p => selectedPlasmids.includes(p.id));
+  
   const scrollRef = useRef(null);
 
   // Scroll to top when new content appears
@@ -27,7 +28,7 @@ const ResultsPanel = () => {
         behavior: 'smooth'
       });
     }
-  }, [wizardState.step]);
+  }, [wizardState.step, showAlignment, showNewDesign]);
 
   return (
     <div className="h-full flex flex-col bg-white">
@@ -45,7 +46,7 @@ const ResultsPanel = () => {
       {/* Results Content */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4">
         <AnimatePresence mode="wait">
-          {wizardState.step === 'start' && (
+          {wizardState.step === 'start' && !showAlignment && !showNewDesign && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -67,8 +68,34 @@ const ResultsPanel = () => {
             </motion.div>
           )}
 
-          {/* Plasmid Visualizations */}
-          {(wizardState.step === 'showPlasmids' || wizardState.step === 'selectPlasmid') && (
+          {/* New Design - Show at top when active */}
+          {showNewDesign && newDesign && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="mb-6"
+              key="new-design"
+            >
+              <NewDesign design={newDesign} />
+            </motion.div>
+          )}
+
+          {/* Sequence Alignment - Show at top when active and no new design */}
+          {showAlignment && !showNewDesign && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="mb-6"
+              key="alignment"
+            >
+              <SequenceAlignment />
+            </motion.div>
+          )}
+
+          {/* Plasmid Visualizations - Show at top when active and no alignment/design */}
+          {selectedPlasmidData.length > 0 && !showAlignment && !showNewDesign && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -85,34 +112,39 @@ const ResultsPanel = () => {
             </motion.div>
           )}
 
-          {/* Sequence Alignment */}
-          {wizardState.step === 'showAlignment' && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="mb-6"
-              key="alignment"
-            >
-              <SequenceAlignment />
-            </motion.div>
-          )}
-
-          {/* New Design */}
-          {wizardState.step === 'showDesign' && newDesign && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="mb-6"
-              key="new-design"
-            >
-              <NewDesign design={newDesign} />
-            </motion.div>
-          )}
+           {/* Secondary Content - Show below primary content */}
+           {showAlignment && showNewDesign && (
+             <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               exit={{ opacity: 0, y: -20 }}
+               className="mb-6"
+               key="alignment-secondary"
+             >
+               <SequenceAlignment />
+             </motion.div>
+           )}
+ 
+           {selectedPlasmidData.length > 0 && (showAlignment || showNewDesign) && (
+             <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               exit={{ opacity: 0, y: -20 }}
+               className="mb-6"
+               key="plasmids-secondary"
+             >
+               <h3 className="text-lg font-semibold text-bio-dark mb-4">Selected Plasmids</h3>
+               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                 {selectedPlasmidData.map((plasmid) => (
+                   <PlasmidVisualization key={plasmid.id} plasmid={plasmid} />
+                 ))}
+               </div>
+             </motion.div>
+           )}
+ 
 
           {/* Checkout Section */}
-          {(selectedPlasmids.length > 0 || showNewDesign) && (
+          {(selectedPlasmidData.length > 0 || showNewDesign) && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
