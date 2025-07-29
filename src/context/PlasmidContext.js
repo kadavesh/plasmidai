@@ -72,6 +72,83 @@ const mockPlasmids = [
   }
 ];
 
+const cas9Plasmids = [
+  {
+    id: 5,
+    name: "pCas9-Plain",
+    description: "Standard Cas9 expression vector",
+    length: 9100,
+    features: [
+      { name: "Cas9", start: 100, end: 4200, type: "gene", color: "#ff6b6b" },
+      { name: "CMV Promoter", start: 10, end: 80, type: "promoter", color: "#4ecdc4" },
+      { name: "AmpR", start: 5000, end: 5900, type: "resistance", color: "#45b7d1" },
+    ],
+    tags: ["Cas9", "Standard"],
+    company: "BioTech Corp"
+  },
+  {
+    id: 6,
+    name: "pCas9-GFP",
+    description: "Cas9 fused to eGFP for visualization",
+    length: 9800,
+    features: [
+      { name: "Cas9", start: 100, end: 4200, type: "gene", color: "#ff6b6b" },
+      { name: "eGFP", start: 4201, end: 4900, type: "tag", color: "#4caf50" },
+      { name: "CMV Promoter", start: 10, end: 80, type: "promoter", color: "#4ecdc4" },
+    ],
+    tags: ["Cas9", "GFP", "Fusion"],
+    company: "BioTech Corp"
+  },
+  {
+    id: 7,
+    name: "pCas9-3xNLS",
+    description: "Cas9 with enhanced nuclear localization",
+    length: 9150,
+    features: [
+      { name: "3xNLS", start: 100, end: 150, type: "nls", color: "#ff9800" },
+      { name: "Cas9", start: 151, end: 4250, type: "gene", color: "#ff6b6b" },
+    ],
+    tags: ["Cas9", "NLS", "Enhanced"],
+    company: "BioTech Corp"
+  },
+  {
+    id: 8,
+    name: "pCas9-FLAG",
+    description: "Cas9 with N-terminal FLAG tag",
+    length: 9124,
+    features: [
+      { name: "FLAG", start: 100, end: 124, type: "tag", color: "#95e1d3" },
+      { name: "Cas9", start: 125, end: 4224, type: "gene", color: "#ff6b6b" },
+    ],
+    tags: ["Cas9", "FLAG", "Tagged"],
+    company: "BioTech Corp"
+  },
+  {
+    id: 9,
+    name: "pSpCas9-2A-Puro",
+    description: "Streptococcus pyogenes Cas9 with Puromycin resistance",
+    length: 9400,
+    features: [
+      { name: "SpCas9", start: 100, end: 4200, type: "gene", color: "#ff6b6b" },
+      { name: "PuroR", start: 4500, end: 5100, type: "resistance", color: "#f44336" },
+    ],
+    tags: ["Cas9", "Puromycin", "SpCas9"],
+    company: "BioTech Corp"
+  },
+  {
+    id: 10,
+    name: "pCas9-SV40NLS",
+    description: "Cas9 with a standard SV40 NLS",
+    length: 9121,
+    features: [
+      { name: "SV40 NLS", start: 4170, end: 4191, type: "nls", color: "#ff9800" },
+      { name: "Cas9", start: 100, end: 4169, type: "gene", color: "#ff6b6b" },
+    ],
+    tags: ["Cas9", "SV40", "NLS"],
+    company: "BioTech Corp"
+  }
+];
+
 const demoConversations = {
   demo1: [
     { type: 'user', content: 'Do I have a plasmid that contains the gene MYC?' },
@@ -211,7 +288,7 @@ const demoConversations = {
 };
 
 export const PlasmidProvider = ({ children }) => {
-  const [plasmids] = useState(mockPlasmids);
+  const [plasmids] = useState([...mockPlasmids, ...cas9Plasmids]);
   const [selectedPlasmids, setSelectedPlasmids] = useState([]);
   const [messages, setMessages] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
@@ -219,8 +296,6 @@ export const PlasmidProvider = ({ children }) => {
   const [showNewDesign, setShowNewDesign] = useState(false);
   const [newDesign, setNewDesign] = useState(null);
   const [isWaitingForAnswer, setIsWaitingForAnswer] = useState(false);
-  const [currentDemo, setCurrentDemo] = useState(null);
-  const [showDemoSelector, setShowDemoSelector] = useState(true);
 
   const addMessage = (message) => {
     setMessages(prev => [...prev, { ...message, id: Date.now() }]);
@@ -234,32 +309,7 @@ export const PlasmidProvider = ({ children }) => {
     );
   };
 
-  const selectDemo = (demoType) => {
-    setCurrentDemo(demoType);
-    setShowDemoSelector(false);
-    setMessages([]);
-    setCurrentStep(0);
-    setShowAlignment(false);
-    setShowNewDesign(false);
-    setSelectedPlasmids([]);
-    setNewDesign(null);
-    setIsWaitingForAnswer(false);
-  };
-
-  const backToDemo = () => {
-    setShowDemoSelector(true);
-    setCurrentDemo(null);
-    setMessages([]);
-    setCurrentStep(0);
-    setShowAlignment(false);
-    setShowNewDesign(false);
-    setSelectedPlasmids([]);
-    setNewDesign(null);
-    setIsWaitingForAnswer(false);
-  };
-
   const runDemoSequence = () => {
-    if (!currentDemo) return;
     setMessages([]);
     setCurrentStep(0);
     setShowAlignment(false);
@@ -270,47 +320,6 @@ export const PlasmidProvider = ({ children }) => {
   };
 
   const advanceDemoStep = () => {
-    if (!currentDemo || currentStep >= demoConversations[currentDemo].length) return;
-    
-    const msg = demoConversations[currentDemo][currentStep];
-      
-      // Add the message
-      setMessages(prev => [...prev, { ...msg, id: Date.now() + currentStep }]);
-      
-      // If this is a user message, set up auto-answer
-      if (msg.type === 'user' && currentStep + 1 < demoConversations[currentDemo].length) {
-        setIsWaitingForAnswer(true);
-        setCurrentStep(currentStep + 1);
-        
-        // Auto-show the AI response after 2 seconds
-        setTimeout(() => {
-          const nextMsg = demoConversations[currentDemo][currentStep + 1];
-          if (nextMsg && nextMsg.type === 'ai') {
-            setMessages(prev => [...prev, { ...nextMsg, id: Date.now() + currentStep + 1 }]);
-            
-            // Handle special actions for AI response - trigger visuals immediately
-            if (nextMsg.showPlasmids) {
-              // Show plasmids immediately when AI response appears
-              setSelectedPlasmids(nextMsg.plasmids);
-            }
-            if (nextMsg.showAlignment) {
-              // Show alignment immediately when AI response appears
-              setShowAlignment(true);
-            }
-            if (nextMsg.showDesign) {
-              // Show design immediately when AI response appears
-              setNewDesign(nextMsg.newDesign);
-              setShowNewDesign(true);
-            }
-            
-            setCurrentStep(currentStep + 2);
-            setIsWaitingForAnswer(false);
-          }
-        }, 2000);
-      } else {
-        // For standalone AI messages (shouldn't happen in current demo flow)
-        setCurrentStep(currentStep + 1);
-      }
   };
 
   const value = {
@@ -322,16 +331,11 @@ export const PlasmidProvider = ({ children }) => {
     showNewDesign,
     newDesign,
     isWaitingForAnswer,
-    currentDemo,
-    showDemoSelector,
     addMessage,
     selectPlasmid,
     setCurrentStep,
     runDemoSequence,
     advanceDemoStep,
-    selectDemo,
-    backToDemo,
-    demoConversations
   };
 
   return (

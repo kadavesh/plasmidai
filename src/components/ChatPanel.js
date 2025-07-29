@@ -1,9 +1,37 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, Play, RefreshCw, ArrowLeft } from 'lucide-react';
+import { Send, Bot, User, Play, RefreshCw, Eye, Download, Tag, CheckCircle } from 'lucide-react';
 import { usePlasmid } from '../context/PlasmidContext';
-import DemoSelector from './DemoSelector';
 import DataSources from './DataSources';
+
+const PlasmidVisualization = ({ plasmid }) => {
+  const { handleSelectPlasmid, wizardState } = usePlasmid();
+  const [selectedFeature, setSelectedFeature] = useState(null);
+
+  return (
+    <div className="bg-white rounded-lg p-4 mt-2">
+      <h4 className="font-semibold text-bio-dark mb-2">Select a Linker:</h4>
+      <div className="space-y-2">
+        {linkers.map(linker => (
+          <motion.div
+            key={linker.value}
+            whileHover={{ scale: 1.02 }}
+            onClick={() => onSelect(linker)}
+            className="p-3 rounded-lg border cursor-pointer hover:border-bio-primary hover:bg-bio-light transition-all"
+          >
+            <div className="flex justify-between items-center">
+              <div>
+                <span className="font-medium text-bio-dark">{linker.name}</span>
+                <span className="ml-2 text-xs text-gray-500">{linker.value}</span>
+              </div>
+              <span className="text-sm text-gray-600">{linker.description}</span>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const ChatPanel = () => {
   const { 
@@ -11,12 +39,7 @@ const ChatPanel = () => {
     addMessage, 
     runDemoSequence, 
     advanceDemoStep, 
-    currentStep, 
-    demoConversations, 
-    isWaitingForAnswer, 
-    currentDemo, 
-    showDemoSelector,
-    backToDemo 
+    isWaitingForAnswer,
   } = usePlasmid();
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -104,79 +127,33 @@ const ChatPanel = () => {
           {message.type === 'ai' && message.dataSources && (
             <DataSources activeSources={message.dataSources} />
           )}
+          {message.payload}
         </div>
       </div>
     </motion.div>
   );
-
-  if (showDemoSelector) {
-    return <DemoSelector />;
-  }
 
   return (
     <div className="h-full flex flex-col bg-bio-light">
       {/* Chat Header */}
       <div className="bg-white border-b border-gray-200 p-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={backToDemo}
-              className="flex items-center space-x-1 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back</span>
-            </motion.button>
             <div>
               <h2 className="text-lg font-semibold text-bio-dark">AI Assistant</h2>
               <p className="text-sm text-gray-600">
-                {currentDemo === 'demo1' && 'Inventory Search & Design Demo'}
-                {currentDemo === 'demo2' && 'Sequence Assembly Demo'}
-                {currentDemo === 'demo3' && 'Fluorescent Protein Selection Demo'}
+                Interactive Cas9 Design Demo
               </p>
             </div>
-          </div>
           <div className="flex space-x-2">
-            {currentStep === 0 ? (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={runDemoSequence}
-                className="flex items-center space-x-2 px-4 py-2 bg-bio-accent text-white rounded-lg hover:bg-opacity-90 transition-colors"
-              >
-                <Play className="w-4 h-4" />
-                <span>Next</span>
-              </motion.button>
-            ) : isWaitingForAnswer ? (
-              <motion.button
-                disabled
-                className="flex items-center space-x-2 px-4 py-2 bg-orange-500 text-white rounded-lg opacity-75 cursor-not-allowed"
-              >
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>AI Responding...</span>
-              </motion.button>
-            ) : currentStep < demoConversations[currentDemo]?.length ? (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={advanceDemoStep}
-                className="flex items-center space-x-2 px-4 py-2 bg-bio-secondary text-white rounded-lg hover:bg-opacity-90 transition-colors"
-              >
-                <Play className="w-4 h-4" />
-                <span>Next ({Math.floor(currentStep/2) + 1}/{Math.ceil(demoConversations[currentDemo]?.length/2)})</span>
-              </motion.button>
-            ) : (
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={runDemoSequence}
-                className="flex items-center space-x-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-opacity-90 transition-colors"
-              >
-                <RefreshCw className="w-4 h-4" />
-                <span>Reset Demo</span>
-              </motion.button>
-            )}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={advanceDemoStep}
+              className="flex items-center space-x-2 px-4 py-2 bg-bio-secondary text-white rounded-lg hover:bg-opacity-90 transition-colors"
+            >
+              <Play className="w-4 h-4" />
+              <span>Next</span>
+            </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -192,7 +169,7 @@ const ChatPanel = () => {
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         <AnimatePresence>
-          {messages.length === 0 && currentDemo && (
+          {messages.length === 0 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -200,14 +177,10 @@ const ChatPanel = () => {
             >
               <Bot className="w-12 h-12 text-bio-primary mx-auto mb-4" />
               <h3 className="text-lg font-medium text-bio-dark mb-2">
-                {currentDemo === 'demo1' && 'Inventory Search & Design'}
-                {currentDemo === 'demo2' && 'Sequence Assembly'}
-                {currentDemo === 'demo3' && 'Fluorescent Protein Selection'}
+                Interactive Cas9 Design
               </h3>
               <p className="text-gray-600 mb-6">
-                {currentDemo === 'demo1' && 'Search your plasmid inventory, compare sequences, and design new variants.'}
-                {currentDemo === 'demo2' && 'Paste sequences to find matches and combine parts from multiple libraries.'}
-                {currentDemo === 'demo3' && 'Design expression vectors with optimal fluorescent proteins for microscopy.'}
+                This demo will walk you through searching for Cas9, comparing variants, and designing a new one.
               </p>
               <motion.button
                 whileHover={{ scale: 1.05 }}
