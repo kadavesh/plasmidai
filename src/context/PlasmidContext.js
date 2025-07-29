@@ -210,11 +210,11 @@ export const PlasmidProvider = ({ children }) => {
               return;
 
             case 'offerModification':
-                currentUserMsg.content = "I want to add an NLS to this Cas9. What should I use?";
+                currentUserMsg.content = "I want to add a linker and a GFP gene to the Cas9. What linker should I use?";
                 addMessage(currentUserMsg);
 
                 setTimeout(() => {
-                    nextAIMsg.content = "We can certainly add a Nuclear Localization Signal (NLS). I've found some common options in your company's inventory and from the broader literature. Please choose one to proceed.";
+                    nextAIMsg.content = "Great choice! Adding GFP will allow you to visualize Cas9 localization. I've found some linker options that work well for Cas9-GFP fusions. Please choose a linker to connect Cas9 and GFP:";
                     nextAIMsg.dataSources = ['inventory', 'waybio', 'knowledge'];
                     const payload = {
                       type: 'linkerOptions',
@@ -298,15 +298,16 @@ export const PlasmidProvider = ({ children }) => {
 
         setTimeout(() => {
             const newPlasmid = {
-                name: `${basePlasmid.name}-NLS-${linker.name.split(' ')[0]}`,
-                description: `New design: ${basePlasmid.name} with an added NLS using a ${linker.name}.`,
-                length: basePlasmid.length + (linker.value.length * 3), // Approx length change
+                name: `${basePlasmid.name}-${linker.name.split(' ')[0]}-GFP`,
+                description: `New design: ${basePlasmid.name} fused to GFP using a ${linker.name} for visualization.`,
+                length: basePlasmid.length + (linker.value.length * 3) + 720, // Approx length change including GFP
                 features: [
                     ...basePlasmid.features,
-                    { name: `NLS (${linker.name})`, start: 4201, end: 4201 + linker.value.length, type: 'nls', color: '#ff9800' },
+                    { name: `Linker (${linker.name})`, start: 4201, end: 4201 + linker.value.length, type: 'linker', color: '#ff9800' },
+                    { name: 'GFP', start: 4201 + linker.value.length, end: 4201 + linker.value.length + 720, type: 'fluorescent', color: '#4ade80' },
                 ],
-                tags: [...basePlasmid.tags, 'NLS', 'Custom-Design'],
-                sequence: `ATGAAGATCCTGAAAGACCTGCAGGATGACATGAAAGAGCTGCAGACCTACGAGAAGATGCTGCAGCTGAAGGACCTGCAG${linker.value}GATGACATGAAAGAGCTGCAGACCTACGAGAAGATGCTGCAGCTGAAGGACCTGCAGGATGACATGAAAGAGCTGCAGACCTACGAGAAGATGCTGCAGCTGAAGGACCTGCAGGATGACATGAAAGAGCTGCAGACCTACGAGAAGATGCTGCAGCTGAAGGACCTGCAGGATGACATGAAAGAG`
+                tags: [...basePlasmid.tags, 'GFP', 'Fluorescent', 'Custom-Design'],
+                sequence: `ATGAAGATCCTGAAAGACCTGCAGGATGACATGAAAGAGCTGCAGACCTACGAGAAGATGCTGCAGCTGAAGGACCTGCAG${linker.value}ATGGTGAGCAAGGGCGAGGAGCTGTTCACCGGGGTGGTGCCCATCCTGGTCGAGCTGGACGGCGACGTAAACGGCCACAAGTTCAGCGTGTCCGGCGAGGGCGAGGGCGATGCCACCTACGGCAAGCTGACCCTGAAGTTCATCTGCACCACCGGCAAGCTGCCCGTGCCCTGGCCCACCCTCGTGACCACCCTGACCTACGGCGTGCAGTGCTTCAGCCGCTACCCCGACCACATGAAGCAGCACGACTTCTTCAAGTCCGCCATGCCCGAAGGCTACGTCCAGGAGCGCACCATCTTCTTCAAGGACGACGGCAACTACAAGACCCGCGCCGAGGTGAAGTTCGAGGGCGACACCCTGGTGAACCGCATCGAGCTGAAGGGCATCGACTTCAAGGAGGACGGCAACATCCTGGGGCACAAGCTGGAGTACAACTACAACAGCCACAACGTCTATATCATGGCCGACAAGCAGAAGAACGGCATCAAGGTGAACTTCAAGATCCGCCACAACATCGAGGACGGCAGCGTGCAGCTCGCCGACCACTACCAGCAGAACACCCCCATCGGCGACGGCCCCGTGCTGCTGCCCGACAACCACTACCTGAGCACCCAGTCCGCCCTGAGCAAAGACCCCAACGAGAAGCGCGATCACATGGTCCTGCTGGAGTTCGTGACCGCCGCCGGGATCACTCTCGGCATGGACGAGCTGTACAAGTAG`
             };
             setNewDesign(newPlasmid);
             setShowNewDesign(true);
@@ -314,7 +315,7 @@ export const PlasmidProvider = ({ children }) => {
             
             const aiMessage = {
                 type: 'ai',
-                content: `Great choice! I've generated the new plasmid map for **${newPlasmid.name}**. You can see the updated design on the right. Does this look correct?`,
+                content: `Perfect! I've generated the new Cas9-GFP fusion plasmid **${newPlasmid.name}**. The ${linker.name} provides optimal spacing between Cas9 and GFP for proper folding and fluorescence. You can see the updated design with both the linker and GFP gene on the right. Does this look correct?`,
                 dataSources: ['inventory', 'waybio', 'ai-design']
             };
             addMessage(aiMessage);

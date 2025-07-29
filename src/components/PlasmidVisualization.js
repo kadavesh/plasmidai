@@ -127,7 +127,8 @@ const PlasmidVisualization = ({ plasmid }) => {
                   x={pos.x}
                   y={pos.y - 8}
                   textAnchor="middle"
-                  className="text-xs font-medium fill-gray-700"
+                  className="text-xs font-medium"
+                  fill="#374151"
                 >
                   {feature.name}
                 </text>
@@ -140,7 +141,8 @@ const PlasmidVisualization = ({ plasmid }) => {
             x={centerX}
             y={centerY - 5}
             textAnchor="middle"
-            className="text-sm font-semibold fill-bio-dark"
+            className="text-sm font-semibold"
+            fill="#1f2937"
           >
             {plasmid.length} bp
           </text>
@@ -148,7 +150,8 @@ const PlasmidVisualization = ({ plasmid }) => {
             x={centerX}
             y={centerY + 10}
             textAnchor="middle"
-            className="text-xs fill-gray-600"
+            className="text-xs"
+            fill="#4b5563"
           >
             circular
           </text>

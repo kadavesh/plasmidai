@@ -1,15 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Send, User, Bot } from 'lucide-react';
+import { Send, User, Bot, RotateCcw } from 'lucide-react';
 import { usePlasmid } from '../context/PlasmidContext';
 import DataSources from './DataSources';
 
 const LinkerOptions = ({ data, onSelect }) => {
+  const getCategoryColor = (category) => {
+    switch (category) {
+      case 'From Your Company Inventory':
+        return 'text-blue-700 bg-blue-50 border-blue-200';
+      case 'From WayBio Parts Library':
+        return 'text-green-700 bg-green-50 border-green-200';
+      case 'From Literature (Validated)':
+        return 'text-purple-700 bg-purple-50 border-purple-200';
+      default:
+        return 'text-gray-700 bg-gray-50 border-gray-200';
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg p-4 mt-2 border border-gray-200">
       {Object.entries(data).map(([category, linkers]) => (
         <div key={category} className="mb-4 last:mb-0">
-          <h4 className="font-semibold text-bio-dark mb-2 text-sm">{category}</h4>
+          <div className={`inline-block px-3 py-1 rounded-md border text-sm font-semibold mb-3 ${getCategoryColor(category)}`}>
+            {category}
+          </div>
           <div className="space-y-2">
             {linkers.map(linker => (
               <motion.div
@@ -74,6 +89,7 @@ const ChatPanel = () => {
     advanceDemoStep, 
     isWaitingForAnswer,
     handleUserAction,
+    runDemoSequence,
   } = usePlasmid();
 
   const [input, setInput] = useState('');
@@ -103,18 +119,34 @@ const ChatPanel = () => {
     handleUserAction('selectLinker', { linker });
   };
 
+  const handleRestartDemo = () => {
+    runDemoSequence();
+    setTimeout(() => advanceDemoStep(), 100);
+  };
+
   return (
     <div className="h-full flex flex-col bg-white">
       {/* Chat Header */}
       <div className="border-b border-gray-200 p-4 bg-gray-50">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-bio-dark">AI Assistant</h2>
-          <button
-            onClick={advanceDemoStep}
-            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-medium"
-          >
-            Next
-          </button>
+          <div className="flex space-x-2">
+            <button
+              onClick={advanceDemoStep}
+              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-medium"
+            >
+              Next
+            </button>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleRestartDemo}
+              className="flex items-center space-x-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Restart Demo</span>
+            </motion.button>
+          </div>
         </div>
         <DataSources />
       </div>

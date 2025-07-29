@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, CreditCard, CheckCircle, Clock, Truck } from 'lucide-react';
+import { ShoppingCart, CreditCard, CheckCircle, Clock, Truck, UserCheck } from 'lucide-react';
 import { usePlasmid } from '../context/PlasmidContext';
 
 const Checkout = () => {
@@ -10,7 +10,8 @@ const Checkout = () => {
     quantity: 1,
     urgency: 'standard',
     format: 'dna',
-    notes: ''
+    notes: '',
+    expertReview: false
   });
 
   const selectedPlasmidData = plasmids.filter(p => selectedPlasmids.includes(p.id));
@@ -24,7 +25,9 @@ const Checkout = () => {
 
   const calculateTotal = () => {
     const basePrice = pricing[orderDetails.urgency][orderDetails.format];
-    return itemsToOrder.length * basePrice * orderDetails.quantity;
+    const itemsTotal = itemsToOrder.length * basePrice * orderDetails.quantity;
+    const expertReviewCost = orderDetails.expertReview ? 100 : 0;
+    return itemsTotal + expertReviewCost;
   };
 
   const handlePlaceOrder = () => {
@@ -182,15 +185,63 @@ const Checkout = () => {
               />
             </div>
 
+            {/* Expert Review Option */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-bio-dark mb-3">
+                Review & Approval
+              </label>
+              <motion.div
+                whileHover={{ scale: 1.01 }}
+                onClick={() => setOrderDetails(prev => ({ ...prev, expertReview: !prev.expertReview }))}
+                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  orderDetails.expertReview
+                    ? 'border-bio-primary bg-bio-light'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <UserCheck className={`w-5 h-5 ${orderDetails.expertReview ? 'text-bio-primary' : 'text-gray-400'}`} />
+                    <div>
+                      <h5 className="font-semibold text-bio-dark">Expert Design Review</h5>
+                      <p className="text-sm text-gray-600">Have a molecular biologist review your design</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-bio-primary">+$100</p>
+                    <p className="text-xs text-gray-500">2-3 day review</p>
+                  </div>
+                </div>
+                {orderDetails.expertReview && (
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    <p className="text-sm text-gray-600">
+                      ✓ Sequence verification and optimization recommendations<br/>
+                      ✓ Feature annotation review<br/>
+                      ✓ Cloning strategy suggestions
+                    </p>
+                  </div>
+                )}
+              </motion.div>
+            </div>
+
             {/* Order Total */}
             <div className="bg-gradient-to-r from-bio-light to-blue-50 rounded-lg p-4 mb-6">
-              <div className="flex items-center justify-between text-lg font-semibold text-bio-dark">
-                <span>Total</span>
-                <span>${calculateTotal().toLocaleString()}</span>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Items ({itemsToOrder.length} × {orderDetails.quantity})</span>
+                  <span className="text-gray-600">${(itemsToOrder.length * pricing[orderDetails.urgency][orderDetails.format] * orderDetails.quantity).toLocaleString()}</span>
+                </div>
+                {orderDetails.expertReview && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600">Expert Design Review</span>
+                    <span className="text-gray-600">$100</span>
+                  </div>
+                )}
+                <div className="border-t pt-2 flex items-center justify-between text-lg font-semibold text-bio-dark">
+                  <span>Total</span>
+                  <span>${calculateTotal().toLocaleString()}</span>
+                </div>
               </div>
-              <p className="text-sm text-gray-600 mt-1">
-                {itemsToOrder.length} item{itemsToOrder.length > 1 ? 's' : ''} × {orderDetails.quantity} unit{orderDetails.quantity > 1 ? 's' : ''} each
-              </p>
             </div>
 
             {/* Place Order Button */}
