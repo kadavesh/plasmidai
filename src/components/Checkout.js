@@ -103,6 +103,45 @@ const Checkout = () => {
               </div>
             </div>
 
+            {/* Expert Review Option */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-bio-dark mb-3">
+                Review & Approval
+              </label>
+              <motion.div
+                whileHover={{ scale: 1.01 }}
+                onClick={() => setOrderDetails(prev => ({ ...prev, expertReview: !prev.expertReview }))}
+                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  orderDetails.expertReview
+                    ? 'border-bio-primary bg-bio-light'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <UserCheck className={`w-5 h-5 ${orderDetails.expertReview ? 'text-bio-primary' : 'text-gray-400'}`} />
+                    <div>
+                      <h5 className="font-semibold text-bio-dark">Expert Design Review</h5>
+                      <p className="text-sm text-gray-600">Have a molecular biologist review your design</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-bio-primary">+$100</p>
+                    <p className="text-xs text-gray-500">2-3 day review</p>
+                  </div>
+                </div>
+                {orderDetails.expertReview && (
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    <p className="text-sm text-gray-600">
+                      ✓ Sequence verification and optimization recommendations<br/>
+                      ✓ Feature annotation review<br/>
+                      ✓ Cloning strategy suggestions
+                    </p>
+                  </div>
+                )}
+              </motion.div>
+            </div>
+
             {/* Order Options */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               {/* Quantity */}
@@ -183,45 +222,6 @@ const Checkout = () => {
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bio-primary focus:border-transparent"
                 rows="3"
               />
-            </div>
-
-            {/* Expert Review Option */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-bio-dark mb-3">
-                Review & Approval
-              </label>
-              <motion.div
-                whileHover={{ scale: 1.01 }}
-                onClick={() => setOrderDetails(prev => ({ ...prev, expertReview: !prev.expertReview }))}
-                className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                  orderDetails.expertReview
-                    ? 'border-bio-primary bg-bio-light'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <UserCheck className={`w-5 h-5 ${orderDetails.expertReview ? 'text-bio-primary' : 'text-gray-400'}`} />
-                    <div>
-                      <h5 className="font-semibold text-bio-dark">Expert Design Review</h5>
-                      <p className="text-sm text-gray-600">Have a molecular biologist review your design</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-bio-primary">+$100</p>
-                    <p className="text-xs text-gray-500">2-3 day review</p>
-                  </div>
-                </div>
-                {orderDetails.expertReview && (
-                  <div className="mt-3 pt-3 border-t border-gray-200">
-                    <p className="text-sm text-gray-600">
-                      ✓ Sequence verification and optimization recommendations<br/>
-                      ✓ Feature annotation review<br/>
-                      ✓ Cloning strategy suggestions
-                    </p>
-                  </div>
-                )}
-              </motion.div>
             </div>
 
             {/* Order Total */}

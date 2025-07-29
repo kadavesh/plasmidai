@@ -33,7 +33,7 @@ const PlasmidVisualization = ({ plasmid }) => {
 
   const getFeaturePosition = (feature) => {
     const arc = getFeatureArc(feature);
-    const labelRadius = radius + 25;
+    const labelRadius = radius + 20; // Reduced from 25 to 20
     const x = centerX + labelRadius * Math.cos(arc.midAngle);
     const y = centerY + labelRadius * Math.sin(arc.midAngle);
     return { x, y };
@@ -83,7 +83,7 @@ const PlasmidVisualization = ({ plasmid }) => {
 
       {/* Plasmid Circle Visualization */}
       <div className="flex items-center justify-center mb-4">
-        <svg width="200" height="200" className="plasmid-circle">
+        <svg width="220" height="220" className="plasmid-circle">
           {/* Main circle */}
           <circle
             cx={centerX}

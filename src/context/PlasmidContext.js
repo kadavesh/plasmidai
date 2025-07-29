@@ -140,6 +140,7 @@ export const PlasmidProvider = ({ children }) => {
   const [showNewDesign, setShowNewDesign] = useState(false);
   const [newDesign, setNewDesign] = useState(null);
   const [isWaitingForAnswer, setIsWaitingForAnswer] = useState(false);
+  const [activeSources, setActiveSources] = useState([]);
   const [wizardState, setWizardState] = useState({
     step: 'start', // start, showPlasmids, selectPlasmid, showAlignment, offerModification, selectLinker, showDesign
     selectedPlasmidId: null,
@@ -161,6 +162,7 @@ export const PlasmidProvider = ({ children }) => {
     setSelectedPlasmids([]);
     setNewDesign(null);
     setIsWaitingForAnswer(false);
+    setActiveSources([]);
     setWizardState({
       step: 'start',
       selectedPlasmidId: null,
@@ -188,6 +190,7 @@ export const PlasmidProvider = ({ children }) => {
                     nextAIMsg.content = "Yes, I found 6 plasmids with the Cas9 gene. Here they are.";
                     nextAIMsg.dataSources = ['inventory'];
                     setSelectedPlasmids([5, 6, 7, 8, 9, 10]);
+                    setActiveSources(['inventory']);
                     nextStep = 'showPlasmids';
                     addMessage(nextAIMsg);
                     setWizardState(prev => ({ ...prev, step: nextStep }));
@@ -202,6 +205,7 @@ export const PlasmidProvider = ({ children }) => {
               setTimeout(() => {
                 nextAIMsg.content = "Here's an alignment of the core Cas9 regions. The main variations are tags and nuclear localization signals (NLS).\n\nSelect a plasmid to use as a base for your new cloning project.";
                 nextAIMsg.dataSources = ['inventory', 'knowledge'];
+                setActiveSources(['inventory', 'knowledge']);
                 addMessage(nextAIMsg);
                 setShowAlignment(true);
                 setWizardState(prev => ({ ...prev, step: 'selectPlasmid' }));
@@ -216,6 +220,7 @@ export const PlasmidProvider = ({ children }) => {
                 setTimeout(() => {
                     nextAIMsg.content = "Great choice! Adding GFP will allow you to visualize Cas9 localization. I've found some linker options that work well for Cas9-GFP fusions. Please choose a linker to connect Cas9 and GFP:";
                     nextAIMsg.dataSources = ['inventory', 'waybio', 'knowledge'];
+                    setActiveSources(['inventory', 'waybio', 'knowledge']);
                     const payload = {
                       type: 'linkerOptions',
                       data: {
@@ -318,6 +323,7 @@ export const PlasmidProvider = ({ children }) => {
                 content: `Perfect! I've generated the new Cas9-GFP fusion plasmid **${newPlasmid.name}**. The ${linker.name} provides optimal spacing between Cas9 and GFP for proper folding and fluorescence. You can see the updated design with both the linker and GFP gene on the right. Does this look correct?`,
                 dataSources: ['inventory', 'waybio', 'ai-design']
             };
+            setActiveSources(['inventory', 'waybio', 'ai-design']);
             addMessage(aiMessage);
             setWizardState(prev => ({ ...prev, step: 'showDesign', selectedLinker: linker }));
             setIsWaitingForAnswer(false);
@@ -333,6 +339,7 @@ export const PlasmidProvider = ({ children }) => {
     showNewDesign,
     newDesign,
     isWaitingForAnswer,
+    activeSources,
     wizardState,
     addMessage,
     runDemoSequence,

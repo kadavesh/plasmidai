@@ -88,6 +88,7 @@ const ChatPanel = () => {
     addMessage, 
     advanceDemoStep, 
     isWaitingForAnswer,
+    activeSources,
     handleUserAction,
     runDemoSequence,
   } = usePlasmid();
@@ -148,7 +149,7 @@ const ChatPanel = () => {
             </motion.button>
           </div>
         </div>
-        <DataSources />
+        <DataSources activeSources={activeSources} />
       </div>
 
       {/* Messages */}
